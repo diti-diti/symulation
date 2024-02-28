@@ -10,7 +10,7 @@ support_start = 1.1  # 10% support
 support_stop = 1.9    # 90% support
 support_step = 0.01 
 
-results = []
+results = []  # Use 'results' consistently to store the outcomes
 
 for support in np.arange(support_start, support_stop + support_step, support_step):
     ukraine_support = np.random.uniform(support, support, simulation_count)
@@ -34,10 +34,9 @@ for support in np.arange(support_start, support_stop + support_step, support_ste
     russia_win_percentage = russia_results / simulation_count * 100
     
     results.append((support, ukraine_win_percentage, russia_win_percentage))
-    wyniki.append((wsparcie, procent_zwycięstw_ukrainy, procent_zwycięstw_rosji)) ##
 
 with open('wyniki_symulacji.txt', 'w') as plik:
     for support, ukraine, russia in results:
         linia = f"Support: {support:.2f}, Ukraine Wins: {ukraine:.2f}%, Russia Wins: {russia:.2f}%\n"
         print(linia.strip()) 
-        plik.write(linia)  
+        plik.write(linia)
