@@ -1,39 +1,42 @@
 import numpy as np
 
-# Base parameters
-ukraine_forces = np.array([1155, 14372, 783, 658, 319])  # Tanks, combat vehicles, self-propelled artillery, towed artillery, MLRS
-russia_forces = np.array([10000, 25000, 5000, 3500, 3000])  # Tanks, combat vehicles, self-propelled artillery, towed artillery, MLRS
-simulation_count = 10000
+# Parametry bazowe
+ukraina_siły = np.array([1155, 14372, 783, 658, 319])  # Czołgi, pojazdy bojowe, artyleria samobieżna, artyleria holowana, MLRS
+rosja_siły = np.array([10000, 25000, 5000, 3500, 3000])  # Czołgi, pojazdy bojowe, artyleria samobieżna, artyleria holowana, MLRS
+liczba_symulacji = 10000
 
-# Support range
-support_start = 1.1  # 10% support
-support_stop = 1.9    # 90% support
-support_step = 0.01 
+# Zakres wsparcia
+wsparcie_start = 1.2
+wsparcie_stop = 1.9
+wsparcie_krok = 0.01 
 
-results = []
+wyniki = []
 
-for support in np.arange(support_start, support_stop + support_step, support_step):
-    ukraine_support = np.random.uniform(support, support, simulation_count)
-    russia_support = np.random.uniform(1.0, 1.0, simulation_count)
-    ukraine_variability = np.random.uniform(0.9, 1.7, simulation_count)
-    russia_variability = np.random.uniform(0.9, 1.0, simulation_count)
+for wsparcie in np.arange(wsparcie_start, wsparcie_stop + wsparcie_krok, wsparcie_krok):
+    wsparcie_ukraina = np.random.uniform(wsparcie, wsparcie, liczba_symulacji)
+    wsparcie_rosja = np.random.uniform(1.0, 1.0, liczba_symulacji)
+    zmienność_ukraina = np.random.uniform(0.9, 1.7, liczba_symulacji)
+    zmienność_rosja = np.random.uniform(0.9, 1.0, liczba_symulacji)
     
-    ukraine_results = 0
-    russia_results = 0
+    wyniki_ukraina = 0
+    wyniki_rosja = 0
     
-    for i in range(simulation_count):
-        ukraine_effectiveness = (ukraine_forces * ukraine_support[i] * ukraine_variability[i]).sum()
-        russia_effectiveness = (russia_forces * russia_support[i] * russia_variability[i]).sum()
+    for i in range(liczba_symulacji):
+        ukraina_efektywność = (ukraina_siły * wsparcie_ukraina[i] * zmienność_ukraina[i]).sum()
+        rosja_efektywność = (rosja_siły * wsparcie_rosja[i] * zmienność_rosja[i]).sum()
         
-        if ukraine_effectiveness > russia_effectiveness:
-            ukraine_results += 1
-        elif ukraine_effectiveness < russia_effectiveness:
-            russia_results += 1
+        if ukraina_efektywność > rosja_efektywność:
+            wyniki_ukraina += 1
+        elif ukraina_efektywność < rosja_efektywność:
+            wyniki_rosja += 1
 
-    ukraine_win_percentage = ukraine_results / simulation_count * 100
-    russia_win_percentage = russia_results / simulation_count * 100
+    procent_zwycięstw_ukrainy = wyniki_ukraina / liczba_symulacji * 100
+    procent_zwycięstw_rosji = wyniki_rosja / liczba_symulacji * 100
     
-    results.append((support, ukraine_win_percentage, russia_win_percentage))
+    wyniki.append((wsparcie, procent_zwycięstw_ukrainy, procent_zwycięstw_rosji))
 
-for support, ukraine, russia in results:
-    print(f"Support: {support:.1f}, Ukraine Wins: {ukraine:.2f}%, Russia Wins: {russia:.2f}%")
+with open('wyniki_symulacji.txt', 'w') as plik:
+    for wsparcie, ukraina, rosja in wyniki:
+        linia = f"Wsparcie: {wsparcie:.2f}, Zwycięstwa Ukrainy: {ukraina:.2f}%, Zwycięstwa Rosji: {rosja:.2f}%\n"
+        print(linia.strip()) 
+        plik.write(linia)  
