@@ -24,7 +24,7 @@ jobs:
           pip install numpy
 
       - name: Run simulation
-        run: python symulacja.py
+        run: python montecarlo.py
 
       - name: Upload results
         uses: actions/upload-artifact@v2
